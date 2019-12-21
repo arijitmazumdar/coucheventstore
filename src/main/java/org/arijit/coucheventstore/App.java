@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.math3.primes.Prime;
-import org.apache.commons.math3.primes.Primes;
 
 /**
  * Hello world!
@@ -32,11 +31,14 @@ public final class App {
         this.property = property;
     }
 
-    private void close() {
+    public App() {
+	}
+
+	private void close() {
         con.disconnect();
     }
 
-    private void listen() {
+    private void listen() throws IOException {
         final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
         StringBuffer content = new StringBuffer();
@@ -46,7 +48,7 @@ public final class App {
             }
             content.append(inputLine);
             // System.out.println(content);
-            q.add(content.toString());
+            //q.add(content.toString());
             content = new StringBuffer();
         }
     }
@@ -101,57 +103,64 @@ public final class App {
                 return false;
             }
         }
+        return true;
     }
 
-    private Object processPalindrome(String message) {
+    private void processPalindrome(String message) {
         int no = getNumber(message);
-        if (isPalindrom(no.toString())) {
+        if (isPalindrom(new String())) {
             publishMessage(no, "This is a prime number");
         }
     }
 
-    private isSquare(double d) {
+    private boolean isSquare(double d) {
         double sqrt = Math.sqrt(d);
         return ((sqrt - Math.floor(sqrt)) == 0);
     }
 
-    private Object processSquare(String message) {
+    private void processSquare(String message) {
         int no = getNumber(message);
-        if (isSquare(Double.valueOf(no)) {
+        if (isSquare(Double.valueOf(no))) {
             publishMessage(no, "This is a perfect square");
         }
     }
 
-    private isCube(double d) {
+    private boolean isCube(double d) {
         double cbrt = Math.cbrt(d);
         return ((cbrt - Math.floor(cbrt)) == 0);
     }
 
-    private Object processCube(String poll) {
+    private void processCube(String message) {
         int no = getNumber(message);
-        if (isCube(Double.valueOf(no)) {
+        if (isCube(Double.valueOf(no))) {
             publishMessage(no, "This is a perfect cube");
         }
     }
 
     private int getNumber(String json) {
         if (json == null)
-            return null;
+            return -1;
         String numberStr = JsonPath.read(json, "$.doc.number");
         return Integer.parseInt(numberStr);
     }
 
     /**
      * Says hello to the world.
-     * 
+     *
      * @param args The arguments of the program.
      */
     public static void main(String[] args) {
         System.out.println("Hello World!");
         App app = new App();
-        app.setup();
-        app.listen();
-        app.close();
+        try {
+            app.setup();
+            app.listen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            app.close();
+        }
     }
 
 }
