@@ -12,14 +12,8 @@ import java.util.Map;
 import java.io.IOException;
 import java.util.LinkedList;
 import com.jayway.jsonpath.JsonPath;
-import org.apache.commons.math3.primes.Prime;
-
-/**
- * Hello world!
- */
-public enum Property {
-    PRIME, PALINDROME, SQUARE, CUBE;
-}
+import org.apache.commons.math3.primes.Primes;
+import org.arijit.coucheventstore.*;
 
 public final class App {
     private String urlStr = "localhost:5984/baseball/_changes?feed=live&heartbeat=6000&since=now";
